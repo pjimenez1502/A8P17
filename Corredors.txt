@@ -1,1 +1,4 @@
-Corredor101001Corredor101001
+Corredor1:0:1001
+Corredor2:1:1002
+Corredor3:1:1003
+Corredor4:0:1004

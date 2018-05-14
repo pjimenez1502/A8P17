@@ -3,9 +3,7 @@ package com.company.manager;
 import com.company.model.Corredor;
 import com.company.model.Equip;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class ManagerCorredors2 {
     static Corredor[] corredors = new Corredor[100];
@@ -18,9 +16,9 @@ public class ManagerCorredors2 {
 
         try {
             FileWriter outputStream = new FileWriter("Corredors.txt",true);
-            outputStream.write(nom);
-            outputStream.write(String.valueOf(equip.id));
-            outputStream.write(String.valueOf(1000+1));
+            outputStream.write(nom+":");
+            outputStream.write(String.valueOf(equip.id+":"));
+            outputStream.write(String.valueOf(1000+1)+"\n");
             outputStream.close();
 
         } catch (IOException e) {
@@ -32,10 +30,20 @@ public class ManagerCorredors2 {
     }
 
     public static Corredor obtenirCorredor(int id){
-        for (int i = 0; i < corredors.length; i++) {
-            if(corredors[i] != null && corredors[i].id == id){
-                return corredors[i];
+
+        try {
+
+            BufferedReader buffReader = new BufferedReader(new FileReader("Corredors.txt"));
+
+            String line;
+            while((line = buffReader.readLine()) != null) {
+                System.out.println(line);
+
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return null;

@@ -11,7 +11,7 @@ public class Main2 {
     public static void main(String[] args) {
 
         Equip equipo1 = new Equip("equipo1");
-        ManagerCorredors2.inscriureCorredor("Corredor1", equipo1);
+        ManagerCorredors2.obtenirCorredor(1002);
 
     }
 }

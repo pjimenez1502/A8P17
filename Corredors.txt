@@ -1,4 +1,6 @@
 Corredor1:0:1001
-Corredor2:1:1002
+Corredor2:1:1010
 Corredor3:1:1003
 Corredor4:0:1004
+Corredor5:0:1005
+Corredor1:0:1006

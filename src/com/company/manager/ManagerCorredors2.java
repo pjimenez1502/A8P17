@@ -37,7 +37,13 @@ public class ManagerCorredors2 {
 
             String line;
             while((line = buffReader.readLine()) != null) {
-                System.out.println(line);
+                String[] partes = line.split(":");
+                if (id==Integer.parseInt(partes[2])){
+
+                    Corredor corredor = new Corredor(partes[0],Integer.parseInt(partes[1]));
+                    corredor.id=Integer.parseInt(partes[2]);
+                    return corredor;
+                }
 
             }
         } catch (FileNotFoundException e) {
@@ -78,10 +84,23 @@ public class ManagerCorredors2 {
     }
 
     public static boolean existeixCorredor(String nom){
-        for (int i = 0; i < corredors.length; i++) {
-            if(corredors[i] != null && corredors[i].nom.toLowerCase().equals(nom.toLowerCase())){
-                return true;
+
+        try {
+
+            BufferedReader buffReader = new BufferedReader(new FileReader("Corredors.txt"));
+
+            String line;
+            while((line = buffReader.readLine()) != null) {
+                String[] partes = line.split(":");
+                if (nom.equals(partes[0])){
+                    return true;
+                }
+
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return false;
@@ -115,34 +134,70 @@ public class ManagerCorredors2 {
         }
     }
 
-    private static int obtenirUltimIdCorredor(){
+    public static int obtenirUltimIdCorredor(){
         int maxId = 0;
-        for (int i = 0; i < corredors.length; i++) {
-            if(corredors[i] != null && corredors[i].id > maxId){
-                maxId = corredors[i].id;
+
+        try {
+
+            BufferedReader buffReader = new BufferedReader(new FileReader("Corredors.txt"));
+
+            String line;
+            while((line = buffReader.readLine()) != null) {
+                String[] partes = line.split(":");
+                if (maxId<Integer.parseInt(partes[2])){
+                    maxId=Integer.parseInt(partes[2]);
+                }
+
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
 
         return maxId;
     }
 
-    private static int obtenirNumeroCorredors(){
+    public static int obtenirNumeroCorredors(){
         int count = 0;
-        for (int i = 0; i < corredors.length; i++) {
-            if(corredors[i] != null){
+
+        try {
+
+            BufferedReader buffReader = new BufferedReader(new FileReader("Corredors.txt"));
+
+            String line;
+            while((line = buffReader.readLine()) != null) {
                 count++;
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return count;
     }
 
-    private static int obtenirNumeroCorredorsPerNom(String nom){
+    public static int obtenirNumeroCorredorsPerNom(String nom){
         int count = 0;
-        for (int i = 0; i < corredors.length; i++) {
-            if(corredors[i] != null && corredors[i].nom.toLowerCase().contains(nom.toLowerCase())){
-                count++;
+
+        try {
+
+            BufferedReader buffReader = new BufferedReader(new FileReader("Corredors.txt"));
+
+            String line;
+            while((line = buffReader.readLine()) != null) {
+                String[] partes = line.split(":");
+                if (nom.equals(partes[0])){
+                    count++;
+                }
+
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return count;

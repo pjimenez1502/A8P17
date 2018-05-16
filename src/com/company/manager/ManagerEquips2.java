@@ -1,19 +1,30 @@
 package com.company.manager;
 
+import com.company.model.Corredor;
 import com.company.model.Equip;
+
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class ManagerEquips2 {
     static Equip[] equips = new Equip[100];
 
     public static Equip inscriureEquip(String nom){
-        for (int i = 0; i < equips.length; i++) {
-            if(equips[i] == null){
-                Equip equip = new Equip(nom);
-                equip.id = obtenirUltimIdEquip() + 1;
-                equips[i] = equip;
 
-                return equip;
-            }
+        try {
+            FileWriter outputStream = new FileWriter("Equips.txt",true);
+            Equip equip = new Equip(nom);
+            equip.id = obtenirUltimIdEquip()+1;
+
+
+            outputStream.write(nom +":");
+            outputStream.write(String.valueOf(equip.id) + "\n");
+            outputStream.close();
+
+            return equip;
+
+        } catch (IOException e) {
+            System.out.println("No se ha podido crear el fichero");
         }
 
         return null;

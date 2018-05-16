@@ -21,11 +21,16 @@ public class ManagerCorredors {
 
         try {
             FileWriter outputStream = new FileWriter("Corredors.txt",true);
-            Corredor newCorredor = new Corredor(nom, equip.id);
-            outputStream.write("\n" + nom+":");
+            Corredor corredor = new Corredor(nom, equip.id);
+            corredor.id = obtenirUltimIdCorredor()+1;
+
+
+            outputStream.write(nom +":");
             outputStream.write(String.valueOf(equip.id+":"));
-            outputStream.write(String.valueOf(obtenirUltimIdCorredor()+1));
+            outputStream.write(String.valueOf(corredor.id) + "\n");
             outputStream.close();
+
+            return corredor;
 
         } catch (IOException e) {
             System.out.println("No se ha podido crear el fichero");
@@ -52,6 +57,7 @@ public class ManagerCorredors {
                 }
 
             }
+            buffReader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -81,6 +87,7 @@ public class ManagerCorredors {
 
                 j++;
             }
+            buffReader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -101,11 +108,14 @@ public class ManagerCorredors {
             int j = 0;
             while((line = buffReader.readLine()) != null) {
                 String[] partes = line.split(":");
-                if (partes[0].contains(nom.toLowerCase())){
-                    llistaCorredors[j]= new Corredor(partes[0], Integer.parseInt(partes[1]));
+                if (partes[0].toLowerCase().contains(nom.toLowerCase())){
+                    Corredor corredor = new Corredor(partes[0], Integer.parseInt(partes[1]));
+                    corredor.id = Integer.parseInt(partes[2]);
+                    llistaCorredors[j]= corredor;
                     j++;
                 }
             }
+            buffReader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -129,6 +139,7 @@ public class ManagerCorredors {
                 }
 
             }
+            buffReader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -151,9 +162,9 @@ public class ManagerCorredors {
                 if (id==Integer.parseInt(partes[2])){
                     fileWriter.write(nouNom + ":");
                     fileWriter.write(String.valueOf(partes[1]) + ":");
-                    fileWriter.write(String.valueOf(id));
+                    fileWriter.write(String.valueOf(id)+"\n");
                 }else{
-                    fileWriter.write("\n" + line);
+                    fileWriter.write(line +"\n");
                 }
 
             }
@@ -186,9 +197,9 @@ public class ManagerCorredors {
                 if (id==Integer.parseInt(partes[2])){
                     fileWriter.write(String.valueOf(partes[0]) + ":");
                     fileWriter.write(nouEquip.id + ":");
-                    fileWriter.write(String.valueOf(partes[2]));
+                    fileWriter.write(String.valueOf(partes[2]) + "\n");
                 }else{
-                    fileWriter.write("\n" + line);
+                    fileWriter.write(line + "\n");
                 }
 
             }
@@ -215,7 +226,7 @@ public class ManagerCorredors {
             while((line = buffReader.readLine()) != null) {
                 String[] partes = line.split(":");
                 if (id!=Integer.parseInt(partes[2])) {
-                    fileWriter.write("\n" + line);
+                    fileWriter.write(line + "\n");
                 }
             }
             fileWriter.close();
@@ -285,7 +296,7 @@ public class ManagerCorredors {
             String line;
             while((line = buffReader.readLine()) != null) {
                 String[] partes = line.split(":");
-                if (nom.equals(partes[0])){
+                if (partes[0].toLowerCase().contains(nom.toLowerCase())){
                     count++;
                 }
 

@@ -4,6 +4,11 @@ import com.company.model.Corredor;
 import com.company.model.Equip;
 
 import java.io.*;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class ManagerCorredors2 {
     static Corredor[] corredors = new Corredor[100];
@@ -13,18 +18,16 @@ public class ManagerCorredors2 {
             return null;
         }
 
-
         try {
             FileWriter outputStream = new FileWriter("Corredors.txt",true);
-            outputStream.write(nom+":");
+            outputStream.write("\n" + nom+":");
             outputStream.write(String.valueOf(equip.id+":"));
-            outputStream.write(String.valueOf(1000+1)+"\n");
+            outputStream.write(String.valueOf(obtenirUltimIdCorredor()+1));
             outputStream.close();
 
         } catch (IOException e) {
             System.out.println("No se ha podido crear el fichero");
         }
-
 
         return null;
     }
@@ -56,14 +59,26 @@ public class ManagerCorredors2 {
     }
 
     public static Corredor[] obtenirLlistaCorredors(){
+
         Corredor[] llistaCorredors = new Corredor[obtenirNumeroCorredors()];
 
-        int j = 0;
-        for (int i = 0; i < corredors.length; i++) {
-            if(corredors[i] != null){
-                llistaCorredors[j] = corredors[i];
+        try {
+
+            BufferedReader buffReader = new BufferedReader(new FileReader("Corredors.txt"));
+
+            String line;
+            int j = 0;
+            while((line = buffReader.readLine()) != null) {
+                String[] partes = line.split(":");
+
+                llistaCorredors[j]= new Corredor(partes[0], Integer.parseInt(partes[1]));
+
                 j++;
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return llistaCorredors;
@@ -72,12 +87,23 @@ public class ManagerCorredors2 {
     public static Corredor[] buscarCorredorsPerNom(String nom){
         Corredor[] llistaCorredors = new Corredor[obtenirNumeroCorredorsPerNom(nom)];
 
-        int j = 0;
-        for (int i = 0; i < corredors.length; i++) {
-            if(corredors[i] != null && corredors[i].nom.toLowerCase().contains(nom.toLowerCase())){
-                llistaCorredors[j] = corredors[i];
-                j++;
+        try {
+
+            BufferedReader buffReader = new BufferedReader(new FileReader("Corredors.txt"));
+
+            String line;
+            int j = 0;
+            while((line = buffReader.readLine()) != null) {
+                String[] partes = line.split(":");
+                if (partes[0].contains(nom.toLowerCase())){
+                    llistaCorredors[j]= new Corredor(partes[0], Integer.parseInt(partes[1]));
+                    j++;
+                }
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return llistaCorredors;
@@ -107,11 +133,35 @@ public class ManagerCorredors2 {
     }
 
     public static void modificarNomCorredor(int id, String nouNom){
-        for (int i = 0; i < corredors.length; i++) {
-            if(corredors[i] != null && corredors[i].id == id){
-                corredors[i].nom = nouNom;
+
+        try {
+
+            BufferedReader buffReader = new BufferedReader(new FileReader("Corredors.txt"));
+            FileWriter fileWriter = new FileWriter("Corredors2.txt",true);
+
+            String line;
+            while((line = buffReader.readLine()) != null) {
+                String[] partes = line.split(":");
+                if (id==Integer.parseInt(partes[2])){
+                    fileWriter.write(nouNom + ":");
+                    fileWriter.write(String.valueOf(partes[1]) + ":");
+                    fileWriter.write(String.valueOf(id));
+                }else{
+                    fileWriter.write("\n" + line);
+                }
+
             }
+            fileWriter.close();
+            buffReader.close();
+
+            Files.move(FileSystems.getDefault().getPath("Corredors2.txt"), FileSystems.getDefault().getPath("Corredors.txt"), REPLACE_EXISTING);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+
     }
 
     public static void modificarEquipCorredor(int id, Equip nouEquip){
@@ -119,19 +169,59 @@ public class ManagerCorredors2 {
             return;
         }
 
-        for (int i = 0; i < corredors.length; i++) {
-            if(corredors[i] != null && corredors[i].id == id){
-                corredors[i].idEquip = nouEquip.id;
+        try {
+
+            BufferedReader buffReader = new BufferedReader(new FileReader("Corredors.txt"));
+            FileWriter fileWriter = new FileWriter("Corredors2.txt",true);
+
+            String line;
+            while((line = buffReader.readLine()) != null) {
+                String[] partes = line.split(":");
+                if (id==Integer.parseInt(partes[2])){
+                    fileWriter.write(String.valueOf(partes[0]) + ":");
+                    fileWriter.write(nouEquip.id + ":");
+                    fileWriter.write(String.valueOf(partes[2]));
+                }else{
+                    fileWriter.write("\n" + line);
+                }
+
             }
+            fileWriter.close();
+            buffReader.close();
+
+            Files.move(FileSystems.getDefault().getPath("Corredors2.txt"), FileSystems.getDefault().getPath("Corredors.txt"), REPLACE_EXISTING);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
     }
 
     public static void esborrarCorredor(int id){
-        for (int i = 0; i < corredors.length; i++) {
-            if(corredors[i] != null && corredors[i].id == id){
-                corredors[i] = null;
+
+        try {
+
+            BufferedReader buffReader = new BufferedReader(new FileReader("Corredors.txt"));
+            FileWriter fileWriter = new FileWriter("Corredors2.txt",true);
+
+            String line;
+            while((line = buffReader.readLine()) != null) {
+                String[] partes = line.split(":");
+                if (id!=Integer.parseInt(partes[2])) {
+                    fileWriter.write("\n" + line);
+                }
             }
+            fileWriter.close();
+            buffReader.close();
+
+            Files.move(FileSystems.getDefault().getPath("Corredors2.txt"), FileSystems.getDefault().getPath("Corredors.txt"), REPLACE_EXISTING);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
     }
 
     public static int obtenirUltimIdCorredor(){

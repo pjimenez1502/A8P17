@@ -13,17 +13,9 @@ public class Main2 {
 
     public static void main(String[] args) {
 
-        Equip equipo1 = new Equip("equipo1");
+        ManagerEquips.inscriureEquip("AAA");
 
-        Corredor corredor = ManagerCorredors2.obtenirCorredor(1004);
-        System.out.println(corredor.id + " " + corredor.nom + " " + corredor.idEquip);
+        PantallaMenuPrincipal.mostrar();
 
-        System.out.println(ManagerCorredors2.existeixCorredor("Corredor1"));
-
-        System.out.println(ManagerCorredors2.obtenirUltimIdCorredor());
-
-        System.out.println(ManagerCorredors2.obtenirNumeroCorredors());
-
-        System.out.println(ManagerCorredors2.obtenirNumeroCorredorsPerNom("Corredor1"));
     }
 }
